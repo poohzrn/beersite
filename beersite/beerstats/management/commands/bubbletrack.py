@@ -25,7 +25,7 @@ class Command(BaseCommand):
         while True:
             pass
 
-    def callback(channel):
+    def callback(self, channel):
         # GPIO.wait_for_edge(channel, GPIO.FALLING)
         if GPIO.input(channel):
             print('rising on {}'.format(channel))
@@ -35,7 +35,7 @@ class Command(BaseCommand):
             print('falling on {}; bubble added to \n {}'
                   .format(channel, brew.name))
 
-    def setup_GPIO_pins(gpio_pins):
+    def setup_GPIO_pins(self, gpio_pins):
         """Sets the pins specified in gpio_pins as input
         :gpio_pins: list of gpio pins
         """
