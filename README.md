@@ -1,7 +1,7 @@
 # beersite
 
 [![Build Status](https://travis-ci.org/poohzrn/beersite.svg?branch=master)](https://travis-ci.org/poohzrn/beersite)
-
+[![Coverage Status](https://coveralls.io/repos/github/poohzrn/beersite/badge.svg?branch=master)](https://coveralls.io/github/poohzrn/beersite?branch=master)
 ### How to
 
 
