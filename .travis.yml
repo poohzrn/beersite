@@ -1,0 +1,14 @@
+language: python
+
+python:
+    - "3.4"
+    - "3.5"
+
+install:
+    - cd beersite
+    - pip install -r requirements.txt
+
+script:
+    - python manage.py makemigrations beergraph
+    - python manage.py migrate
+    - python manage.py test
