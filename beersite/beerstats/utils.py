@@ -11,11 +11,12 @@ def get_intervals(interval_size, start_date, end_date):
     :end_date: end date for interval
     :returns: a list of n intervals between the two specified dates
     """
-    list2 = []
+    intervals = []
     while start_date <= end_date:
-        list2.append(timezone.localtime(start_date))
+        intervals.append(timezone.localtime(start_date))
         start_date += timedelta(hours=interval_size)
-    return list2
+    return intervals
+
 
 def get_chart_data(intervals, interval_size, brew_id):
     """TODO: Docstring for get_chart_data.
