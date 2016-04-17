@@ -53,15 +53,6 @@ class Brew(models.Model):
         return self.bubble_set.all(). \
             aggregate(Min('time_stamp'))['time_stamp__min']
 
-    def get_intervals(self, arg1):
-        """TODO: Docstring for get_intervals.
-
-        :arg1: TODO
-        :returns: TODO
-
-        """
-        pass
-
     def __str__(self):
         """TODO: Docstring for __str__.
         :returns: TODO

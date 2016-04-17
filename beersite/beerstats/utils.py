@@ -31,3 +31,15 @@ def get_chart_data(intervals, interval_size, brew_id):
                     brew.bubbles_in_interval(interval,
                     interval + timedelta(hours=interval_size))])
     return data
+
+
+class ChartData(object):
+    def get_data(time_from=timezone.now(), time_to=timezone.now(), size=2):
+        brews = Brew.objects.all()
+        data = {}
+        for brew in brews:
+            intervaldata = {}
+            for interval in get_intervals(size, time_from, time_to):
+                intervaldata[interval] = brew.bubbles_in_interval(interval, interval + timedelta(hours=size))
+            data[brew.name] = intervaldata
+        return data
