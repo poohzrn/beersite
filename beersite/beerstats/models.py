@@ -1,19 +1,8 @@
 from django.db import models
 from django.db.models import Min
+from django.db.models import Max
 from django.utils import timezone
 
-def get_intervals(interval_size, start_date, end_date):
-    """ Calculate a list of intervals between two dates
-        based based on a given interval size in hours
-    :interval_size: size of intervals in hours
-    :start_date: start date of interval
-    :end_date: end date for interval
-    :returns: a list of n intervals between the two specified dates
-    """
-    number_of_days = (end_date - start_date).days
-    return [end_date - timedelta(hours=interval, days=day)
-            for day in range(0, number_of_days)
-            for interval in range(0, interval_size)]
 
 class Brew(models.Model):
     """A brew class"""
@@ -50,14 +39,16 @@ class Brew(models.Model):
         :returns: First date a bubble is registered
 
         """
-        return self.bubble_set.all(). \
-            aggregate(Min('time_stamp'))['time_stamp__min']
+        return self.bubble_set.aggregate(Min('time_stamp'))['time_stamp__min']
 
-    def __str__(self):
-        """TODO: Docstring for __str__.
-        :returns: TODO
+    def get_max_date(self):
+        """
+        :returns: Last date a bubble is registered
 
         """
+        return self.bubble_set.aggregate(Max('time_stamp'))['time_stamp__max']
+
+    def __str__(self):
         return self.name
 
 

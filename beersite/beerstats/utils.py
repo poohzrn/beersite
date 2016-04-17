@@ -2,6 +2,8 @@ from datetime import timedelta
 from django.utils import timezone
 from beerstats.models import Brew
 
+# TODO: refactor
+
 
 def get_intervals(interval_size, start_date, end_date):
     """ Calculate a list of intervals between two dates
@@ -34,12 +36,11 @@ def get_chart_data(intervals, interval_size, brew_id):
 
 
 class ChartData(object):
-    def get_data(time_from=timezone.now(), time_to=timezone.now(), size=2):
-        brews = Brew.objects.all()
+    def get_data(interval_size=2):
         data = {}
-        for brew in brews:
+        for brew in Brew.objects.all():
             intervaldata = {}
-            for interval in get_intervals(size, time_from, time_to):
-                intervaldata[interval] = brew.bubbles_in_interval(interval, interval + timedelta(hours=size))
+            for interval in get_intervals(interval_size, brew.start_time, brew.get_max_date()):
+                intervaldata[interval] = brew.bubbles_in_interval(interval, interval + timedelta(hours=interval_size))
             data[brew.name] = intervaldata
         return data
