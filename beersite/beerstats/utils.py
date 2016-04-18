@@ -1,11 +1,38 @@
 from datetime import timedelta
 from django.utils import timezone
 from beerstats.models import Brew
+from calendar import timegm
 
-# TODO: refactor
+def get_chart_series(interval_size=2):
+    """Return series for highcharts with a given interval in hours
+    :interval_size: interval in hours
+    :returns: series of [interval, count]
+    """
+    series = []
+    data = _get_data(interval_size)
+    for dataitem in data:
+        itemdata = []
+        for interval, count in sorted(data[dataitem].items()):
+            itemdata.append([get_js_date(interval), count])
+
+        series.append({"name": dataitem,
+                       "data": itemdata})
+    return series
 
 
-def get_intervals(interval_size, start_date, end_date):
+def _get_data(interval_size):
+    """Returns raw data for get_chart_series
+    """
+    data = {}
+    for brew in Brew.objects.all():
+        intervaldata = {}
+        for interval in _get_intervals(interval_size, brew.start_time, brew.get_max_date()):
+            intervaldata[interval] = brew.bubbles_in_interval(interval, interval + timedelta(hours=interval_size))
+        data[brew.name] = intervaldata
+    return data
+
+
+def _get_intervals(interval_size, start_date, end_date):
     """ Calculate a list of intervals between two dates
         based based on a given interval size in hours
     :interval_size: size of intervals in hours
@@ -13,6 +40,8 @@ def get_intervals(interval_size, start_date, end_date):
     :end_date: end date for interval
     :returns: a list of n intervals between the two specified dates
     """
+    if not end_date:
+        end_date = start_date
     intervals = []
     while start_date <= end_date:
         intervals.append(timezone.localtime(start_date))
@@ -20,27 +49,5 @@ def get_intervals(interval_size, start_date, end_date):
     return intervals
 
 
-def get_chart_data(intervals, interval_size, brew_id):
-    """TODO: Docstring for get_chart_data.
-    :intervals: TODO
-    :brew_id: TODO
-    :returns: TODO
-    """
-    brew = Brew.objects.get(id=brew_id)
-    data = [['ts', 'bubbles']]
-    for interval in intervals:
-        data.append([str(interval),
-                    brew.bubbles_in_interval(interval,
-                    interval + timedelta(hours=interval_size))])
-    return data
-
-
-class ChartData(object):
-    def get_data(interval_size=2):
-        data = {}
-        for brew in Brew.objects.all():
-            intervaldata = {}
-            for interval in get_intervals(interval_size, brew.start_time, brew.get_max_date()):
-                intervaldata[interval] = brew.bubbles_in_interval(interval, interval + timedelta(hours=interval_size))
-            data[brew.name] = intervaldata
-        return data
+def get_js_date(date):
+    return int(timegm(date.timetuple())) * 1000

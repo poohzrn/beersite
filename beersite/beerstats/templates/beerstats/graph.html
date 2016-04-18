@@ -22,9 +22,11 @@
         $(document).ready(function() {
             $(chart_id).highcharts({
                 chart: chart,
-                series: series
+                series: series,
+                xAxis: {
+                    type: 'datetime'
+                }
             });
-            $('.datepicker').datepicker();
         });
         </script>
     {% endblock js %}

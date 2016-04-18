@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from beerstats.forms import OptionForm
-from beerstats.utils import ChartData
+from beerstats.utils import get_chart_series
 
 
 def index(request):
@@ -16,19 +16,11 @@ def graph(request, chartID='chart_ID', chart_type='line', chart_height=500):
         if options.is_valid():
             interval = int(options.cleaned_data['interval'])
             chart_type = options.cleaned_data['chart_type']
-            data = ChartData.get_data(interval)
+            series = get_chart_series(interval)
 
     else:
         options = OptionForm()
-        data = ChartData.get_data()
-
-    # Map the data to series
-    series = []
-    for dataitem in data:
-        itemdata = []
-        for interval, count in sorted(data[dataitem].items()):
-            itemdata.append([str(interval), count])
-        series.append({"name": dataitem, "data": itemdata})
+        series = get_chart_series()
 
     chart = {"renderTo": chartID,
              "type": chart_type,
