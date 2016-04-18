@@ -1,14 +1,11 @@
 from django.core.management.base import BaseCommand
 from beerstats.models import Brew
 from beerstats.models import Bubble
-from random import randint
-import time
 
 try:
     import RPi.GPIO as GPIO
-    DEBUG = False
 except RuntimeError as e:
-    DEBUG = True
+    print("GPIO commands is only supported on Raspbeery Pi")
 
 
 class Command(BaseCommand):
@@ -44,15 +41,6 @@ class Command(BaseCommand):
             GPIO.setup(gpio_port, GPIO.IN, pull_up_down=GPIO.PUD_DOWN)
             GPIO.add_event_detect(gpio_port, GPIO.BOTH, callback=self.callback)
 
-    def debug(self, gpio_pins):
-        """TODO: Docstring for debug.
-        :gpio_pins: TODO
-        """
-        while True:
-            brew = Brew.objects.filter(bubble_sensor_gpio=23)[0]
-            Bubble.objects.create(brew_id=brew.id)
-            time.sleep(randint(0, 100))
-
     def handle(self, *args, **options):
         """TODO: handle bubbletrack
         :*args: Add later
@@ -65,8 +53,8 @@ class Command(BaseCommand):
                 print("Tracking pin {} for brew: {} ".
                       format(brew.bubble_sensor_gpio, brew.name))
 
-        if gpio_pins and not DEBUG:
+        if len(gpio_pins) > 0 and GPIO:
             self.setup_GPIO_pins(gpio_pins)
             self.track_bubbles()
-        elif gpio_pins:
-            self.debug(gpio_pins)
+        else:
+            exit()

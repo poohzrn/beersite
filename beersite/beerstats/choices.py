@@ -8,5 +8,7 @@ INTERVALCHOICES = (
 
 CHARTCHOICES = (
         ('line', 'Line Chart',),
-        ('column', 'Column Chart',)
+        ('area', 'Area Chart',),
+        ('spline', 'Spline Chart',),
+        ('bar', 'Bar Chart',)
         )

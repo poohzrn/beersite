@@ -1,12 +1,6 @@
 from django.shortcuts import render
-from beerstats.models import Brew
-from beerstats.utils import get_intervals
-from beerstats.utils import get_chart_data
 from beerstats.forms import OptionForm
-
-from graphos.sources.simple import SimpleDataSource
-from graphos.renderers import gchart
-from django.utils import timezone
+from beerstats.utils import ChartData
 
 
 def index(request):
@@ -15,31 +9,33 @@ def index(request):
     return render(request, template, context)
 
 
-def graph(request):
+def graph(request, chartID='chart_ID', chart_type='line', chart_height=500):
     template = 'beerstats/graph.html'
-    time_from = timezone.now()
-    chart = None
-    chart_type = 'line'
-    options = OptionForm()
-
     if request.method == 'POST':
-
         options = OptionForm(data=request.POST)
-
         if options.is_valid():
-
             interval = int(options.cleaned_data['interval'])
-            brew_id = options.cleaned_data['brew'].id
             chart_type = options.cleaned_data['chart_type']
-            brew = Brew.objects.get(id=brew_id)
-            time_from = brew.start_time
-            intervals = get_intervals(interval, time_from, timezone.now())
-            data = get_chart_data(intervals, interval, brew.id)
-            chart = gchart.ColumnChart(SimpleDataSource(data=data))
+            data = ChartData.get_data(interval)
 
-    context = {'chart': chart,
-               'chart_type': chart_type,
-               'options': options,
-               'nav_active': 'graph'}
+    else:
+        options = OptionForm()
+        data = ChartData.get_data()
 
+    # Map the data to series
+    series = []
+    for dataitem in data:
+        itemdata = []
+        for interval, count in sorted(data[dataitem].items()):
+            itemdata.append([str(interval), count])
+        series.append({"name": dataitem, "data": itemdata})
+
+    chart = {"renderTo": chartID,
+             "type": chart_type,
+             "height": chart_height, }
+
+    context = {'chartID': chartID,
+               'chart': chart,
+               'series': series,
+               'options': options}
     return render(request, template, context)
