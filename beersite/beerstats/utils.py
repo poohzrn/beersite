@@ -1,7 +1,10 @@
+"""
+Utils used to create highchart data
+"""
+from calendar import timegm
 from datetime import timedelta
 from django.utils import timezone
 from beerstats.models import Brew
-from calendar import timegm
 
 def get_chart_series(interval_size=2):
     """Return series for highcharts with a given interval in hours
@@ -50,4 +53,5 @@ def _get_intervals(interval_size, start_date, end_date):
 
 
 def get_js_date(date):
+    "Return a date in js format"
     return int(timegm(date.timetuple())) * 1000

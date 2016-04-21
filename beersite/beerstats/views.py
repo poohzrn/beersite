@@ -1,15 +1,22 @@
+"""
+Views
+"""
 from django.shortcuts import render
 from beerstats.forms import OptionForm
 from beerstats.utils import get_chart_series
 
 
 def index(request):
+    "Default index view"
     template = 'beerstats/base.html'
     context = {'nav_active': 'home'}
     return render(request, template, context)
 
 
-def graph(request, chartID='chart_ID', chart_type='line', chart_height=500):
+def graph(request, chart_id='chart_ID', chart_type='line', chart_height=500):
+    """
+    Graph/Chart view
+    """
     template = 'beerstats/graph.html'
     if request.method == 'POST':
         options = OptionForm(data=request.POST)
@@ -22,11 +29,11 @@ def graph(request, chartID='chart_ID', chart_type='line', chart_height=500):
         options = OptionForm()
         series = get_chart_series()
 
-    chart = {"renderTo": chartID,
+    chart = {"renderTo": chart_id,
              "type": chart_type,
              "height": chart_height, }
 
-    context = {'chartID': chartID,
+    context = {'chartID': chart_id,
                'chart': chart,
                'series': series,
                'options': options}

@@ -10,5 +10,9 @@ CHARTCHOICES = (
         ('line', 'Line Chart',),
         ('area', 'Area Chart',),
         ('spline', 'Spline Chart',),
+        ('areaspline', 'Area Spline Chart',),
+        ('column', 'Column',),
+        ('pie', 'Pie',),
+        ('scatter', 'scatter',),
         ('bar', 'Bar Chart',)
         )
