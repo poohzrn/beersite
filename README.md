@@ -10,6 +10,4 @@
 - Migrate `python manage.py migrate`
 - GPIO `python manage.py bubbletrack`
 
-![./pics/pic1.png](./pics/pic1.png)
-![./pics/pic2.png](./pics/pic2.png)
-![./pics/pic3.png](./pics/pic3.png)
+![./pics/demo.gif](./pics/demo.gif)
