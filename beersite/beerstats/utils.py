@@ -46,7 +46,7 @@ def _get_intervals(interval_size, start_date, end_date):
     if not end_date:
         end_date = start_date
     intervals = []
-    while start_date <= end_date:
+    while start_date < end_date:
         intervals.append(timezone.localtime(start_date))
         start_date += timedelta(hours=interval_size)
     return intervals
