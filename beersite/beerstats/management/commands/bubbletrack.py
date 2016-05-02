@@ -15,8 +15,8 @@ class Command(BaseCommand):
 
     @staticmethod
     def track_bubbles():
-        """TODO: Docstring for track_bubbles.
-        :returns: TODO
+        """ busy loop
+        :returns:
 
         """
         while True:
@@ -41,7 +41,7 @@ class Command(BaseCommand):
             GPIO.add_event_detect(gpio_port, GPIO.BOTH, callback=self.callback)
 
     def handle(self, *args, **options):
-        """TODO: handle bubbletrack
+        """handle bubbletrack
         :*args: Add later
         :**options: ..
         """

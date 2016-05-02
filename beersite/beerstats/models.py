@@ -1,3 +1,7 @@
+"""
+This is where we define our model used in the project
+
+"""
 from django.db import models
 from django.db.models import Min
 from django.db.models import Max
@@ -12,11 +16,11 @@ class Brew(models.Model):
     finished = models.BooleanField(default=False)
 
     def bubbles_in_interval(self, time_from, time_to):
-        """TODO: Docstring for bubbles_in_interval.
+        """Get the number of bubbles in a given time interval
 
-        :time_from: TODO
-        :time_to: TODO
-        :returns: TODO
+        :time_from: Time from
+        :time_to: Time to
+        :returns: Number of bubbles
 
         """
         if time_from > time_to:
@@ -26,17 +30,8 @@ class Brew(models.Model):
             return self.bubble_set.filter(time_stamp__gte=time_from,
                                           time_stamp__lt=time_to).count()
 
-    def bubbles_from_to_now(self, time_from):
-        """TODO: Docstring for bubbles_from_to_now.
-
-        :time_from: time from
-        :returns: number of bubbles from 'time_from' untill now
-
-        """
-        return self.bubbles_in_interval(time_from, timezone.now())
-
     def get_min_date(self):
-        """TODO: Docstring for get_min_date.
+        """ First date a bubble is registered
         :returns: First date a bubble is registered
 
         """
@@ -60,8 +55,8 @@ class Bubble(models.Model):
     brew = models.ForeignKey(Brew)
 
     def __str__(self):
-        """TODO: Docstring for __str__.
-        :returns: TODO
+        """ String representation of Bubble objects
+        :returns: pretty a string
 
         """
         return self.brew.name + ": " + str(self.time_stamp.isoformat())

@@ -14,7 +14,7 @@ class Command(BaseCommand):
     help = 'Tracks bubbles on a specified GPIO port'
 
     def handle(self, *args, **options):
-        """TODO: handle bubbletrack
+        """handle bubbletrack command
         :*args: Add later
         :**options: ..
         """
