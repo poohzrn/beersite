@@ -47,7 +47,7 @@ class Command(BaseCommand):
         """
         gpio_pins = []
         for brew in Brew.objects.all():
-            if brew.bubble_sensor_gpio:
+            if brew.bubble_sensor_gpio and not brew.finished:
                 gpio_pins.append(brew.bubble_sensor_gpio)
 
         if len(gpio_pins) > 0 and GPIO:
