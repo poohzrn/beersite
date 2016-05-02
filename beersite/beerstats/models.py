@@ -9,6 +9,7 @@ class Brew(models.Model):
     name = models.CharField(max_length=50)
     bubble_sensor_gpio = models.SmallIntegerField(blank=True, null=True)
     start_time = models.DateTimeField(default=timezone.now)
+    finished = models.BooleanField(default=False)
 
     def bubbles_in_interval(self, time_from, time_to):
         """TODO: Docstring for bubbles_in_interval.
