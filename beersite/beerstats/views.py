@@ -36,5 +36,6 @@ def graph(request, chart_id='chart_ID', chart_type='line', chart_height=500):
     context = {'chartID': chart_id,
                'chart': chart,
                'series': series,
+               'nav_active': 'graph',
                'options': options}
     return render(request, template, context)
